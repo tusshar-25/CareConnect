@@ -15,7 +15,6 @@ import patientRoutes from './routes/patients.js'
 import volunteerRoutes from './routes/volunteers.js'
 import contactRoutes from './routes/contact.js'
 import chatbotRoutes from './routes/chatbot.js'
-import adminRoutes from './routes/admin.js'
 
 // Configuration
 const __filename = fileURLToPath(import.meta.url)
@@ -100,7 +99,6 @@ app.use('/api/patients', patientRoutes)
 app.use('/api/volunteers', volunteerRoutes)
 app.use('/api/contact', contactRoutes)
 app.use('/api/chatbot', chatbotRoutes)
-app.use('/api/admin', adminRoutes)
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

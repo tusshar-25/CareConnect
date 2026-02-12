@@ -4,7 +4,7 @@ A comprehensive full-stack healthcare support platform that connects patients wi
 
 ## 🌟 Features
 
-### For Patients
+### For Users
 - **Patient Support Forms** - Submit medical concerns with file uploads
 - **Emergency Assistance** - Quick access to emergency services
 - **AI Health Chatbot** - Get instant medical guidance
@@ -16,12 +16,6 @@ A comprehensive full-stack healthcare support platform that connects patients wi
 - **Availability Management** - Set your schedule and preferences
 - **Patient Assignment** - Get matched with patients needing help
 - **Rating System** - Build your reputation through reviews
-
-### For Administrators
-- **Dashboard Analytics** - Monitor platform performance
-- **Patient Management** - Track and manage patient requests
-- **Volunteer Approval** - Review and approve volunteer applications
-- **Contact Management** - Handle inquiries and support requests
 
 ## 🛠 Tech Stack
 
@@ -109,7 +103,6 @@ npm run dev
 6. **Access the application**
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:3002
-- Admin Dashboard: http://localhost:5173/admin
 
 ## 📁 Project Structure
 
@@ -191,17 +184,13 @@ The application uses OpenAI's API for:
 
 ### Patients
 - `POST /api/patients` - Create patient request
-- `GET /api/patients` - Get all patients (admin)
 - `GET /api/patients/:id` - Get specific patient
 - `PUT /api/patients/:id` - Update patient
 - `POST /api/patients/:id/notes` - Add patient notes
 
 ### Volunteers
 - `POST /api/volunteers` - Submit volunteer application
-- `GET /api/volunteers` - Get all volunteers (admin)
 - `GET /api/volunteers/available` - Get available volunteers
-- `PUT /api/volunteers/:id/approve` - Approve volunteer
-- `PUT /api/volunteers/:id/reject` - Reject volunteer
 
 ### Chatbot
 - `POST /api/chatbot` - Send message to AI
@@ -211,13 +200,6 @@ The application uses OpenAI's API for:
 
 ### Contact
 - `POST /api/contact` - Submit contact form
-- `GET /api/contact` - Get all messages (admin)
-- `POST /api/contact/:id/respond` - Respond to message
-
-### Admin
-- `GET /api/admin/dashboard` - Get dashboard statistics
-- `GET /api/admin/analytics` - Get detailed analytics
-- `GET /api/admin/alerts` - Get system alerts
 
 ## 🧪 Testing
 
@@ -256,17 +238,13 @@ CLIENT_URL=your-frontend-url
 
 ## 👥 Demo Accounts
 
-### Admin Dashboard
-- **Email**: admin@careconnect.org
-- **Password**: admin123
+### Patient Access
+- **Email**: patient@careconnect.org
+- **Password**: patient123
 
 ### Volunteer Portal
 - **Email**: volunteer@careconnect.org
 - **Password**: volunteer123
-
-### Patient Access
-- **Email**: patient@careconnect.org
-- **Password**: patient123
 
 ## 🤝 Contributing
 
