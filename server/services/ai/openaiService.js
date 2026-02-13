@@ -56,16 +56,21 @@ Remember: You are supporting, not diagnosing. Safety first.`
   async generateResponse(message, sessionId = null) {
     try {
       // Initialize OpenAI client if not already done
+      console.log('🔧 Initializing OpenAI service...')
       this.initialize()
       
       console.log('OpenAI API Key exists:', !!process.env.OPENAI_API_KEY)
+      console.log('OpenAI API Key length:', process.env.OPENAI_API_KEY?.length || 0)
+      console.log('OpenAI client initialized:', !!this.openai)
       
       // Check for emergency keywords
       const isEmergency = this.checkForEmergency(message)
       if (isEmergency) {
+        console.log('🚨 Emergency detected, returning emergency response')
         return this.getEmergencyResponse()
       }
 
+      console.log('🤖 Calling OpenAI API...')
       // Use real OpenAI API
       const contextualPrompt = `${this.systemPrompt}
 
@@ -90,7 +95,9 @@ Keep the response concise but comprehensive (under 300 words).`
         temperature: 0.7
       })
 
+      console.log('✅ OpenAI API response received')
       const aiResponse = response.choices[0].message.content.trim()
+      console.log('AI Response length:', aiResponse.length)
 
       return {
         response: aiResponse,
@@ -103,7 +110,13 @@ Keep the response concise but comprehensive (under 300 words).`
         isEmergency: false
       }
     } catch (error) {
-      console.error('OpenAI API Error:', error)
+      console.error('❌ OpenAI API Error:', error)
+      console.error('Error details:', {
+        message: error.message,
+        status: error.status,
+        code: error.code,
+        type: error.type
+      })
       return this.getFallbackResponse()
     }
   }
