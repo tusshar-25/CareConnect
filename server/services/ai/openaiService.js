@@ -2,10 +2,7 @@ import OpenAI from 'openai'
 
 class OpenAIService {
   constructor() {
-    // Initialize OpenAI with API key from environment
-    this.openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    })
+    this.openai = null
     this.systemPrompt = `You are a healthcare support assistant for CareConnect. Your role is to provide helpful, accurate medical information and guidance while maintaining professional boundaries.
 
 Key Guidelines:
@@ -34,8 +31,33 @@ Remember: You are supporting, not diagnosing. Safety first.`
     ]
   }
 
+  initialize() {
+    if (this.openai) return
+
+    // Validate OpenAI API key
+    if (!process.env.OPENAI_API_KEY) {
+      console.error(' OPENAI_API_KEY environment variable is not set')
+      throw new Error('OpenAI API key is required')
+    }
+
+    if (process.env.OPENAI_API_KEY.length < 20) {
+      console.error(' OPENAI_API_KEY appears to be invalid (too short)')
+      throw new Error('OpenAI API key appears to be invalid')
+    }
+
+    // Initialize OpenAI with API key from environment
+    this.openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    })
+
+    console.log(' OpenAI client initialized successfully')
+  }
+
   async generateResponse(message, sessionId = null) {
     try {
+      // Initialize OpenAI client if not already done
+      this.initialize()
+      
       console.log('OpenAI API Key exists:', !!process.env.OPENAI_API_KEY)
       
       // Check for emergency keywords
