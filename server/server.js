@@ -63,7 +63,11 @@ console.log('OPENAI_API_KEY:', process.env.OPENAI_API_KEY ? 'Set' : 'Not set')
 // Security middleware
 app.use(helmet())
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  origin: [
+    'http://localhost:5173', 
+    'http://localhost:5174',
+    'https://careconnect-8yxvgturr-tusshar-25s-projects.vercel.app'
+  ],
   credentials: true
 }))
 
