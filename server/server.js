@@ -131,7 +131,7 @@ app.use((error, req, res, next) => {
   })
 })
 
-// 404 handler
+// 404 handler - must be last
 app.use('*', (req, res) => {
   res.status(404).json({ 
     success: false, 
