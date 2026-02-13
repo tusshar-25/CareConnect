@@ -95,7 +95,8 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/careconne
 })
 .catch((error) => {
   console.error('❌ MongoDB connection error:', error)
-  process.exit(1)
+  // Don't exit the process, just log the error and continue
+  // This allows other routes to work even if MongoDB fails
 })
 
 // Routes
