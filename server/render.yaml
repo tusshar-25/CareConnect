@@ -1,9 +1,10 @@
 services:
   - type: web
     name: careconnect-server
-    env: docker
+    env: node
     plan: free
-    dockerfilePath: ./Dockerfile
+    buildCommand: chmod +x start.sh && ./start.sh
+    startCommand: npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
