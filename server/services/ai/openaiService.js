@@ -1,12 +1,11 @@
 import OpenAI from 'openai'
 
-// Initialize OpenAI with API key from environment
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
-
 class OpenAIService {
   constructor() {
+    // Initialize OpenAI with API key from environment
+    this.openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    })
     this.systemPrompt = `You are a healthcare support assistant for CareConnect. Your role is to provide helpful, accurate medical information and guidance while maintaining professional boundaries.
 
 Key Guidelines:
@@ -45,37 +44,34 @@ Remember: You are supporting, not diagnosing. Safety first.`
         return this.getEmergencyResponse()
       }
 
-      // For now, return a simple response without calling OpenAI to test the flow
-      const simpleResponses = {
-        'volunteer': 'Thank you for your interest in volunteering with CareConnect! You can register as a healthcare volunteer on our platform. We\'ll review your application and connect you with patients who need your expertise. Our volunteers include doctors, nurses, and other healthcare professionals who want to make a difference.',
-        'support': 'I can help you get the support you need! You can submit a patient support request through our platform, and we\'ll connect you with appropriate healthcare volunteers. For urgent medical concerns, please call 112 immediately.',
-        'emergency': '🚨 This sounds like an emergency! Please call 112 immediately for emergency medical services. If this is not an emergency but you need urgent medical guidance, please visit the nearest hospital or call our support hotline at 1800-123-4567.',
-        'symptom': 'I understand you\'re experiencing symptoms. While I can provide general guidance, I recommend: 1) For severe symptoms, call 112 immediately 2) For non-emergency symptoms, you can submit a patient support request 3) Keep track of your symptoms including duration and severity 4) Stay hydrated and rest. Please consult a healthcare professional for proper diagnosis.',
-        'appointment': 'For appointments, you can submit a patient support request and we\'ll help connect you with appropriate healthcare providers. You can also browse our services to find the right type of care for your needs.',
-        'medicine': 'For medication information, I recommend consulting with a healthcare professional. Our platform can connect you with qualified healthcare volunteers who can provide guidance on medications and their proper usage. Never share personal medical information in chat.',
-        'default': 'I\'m here to help you with healthcare support! I can assist with: • Finding the right healthcare services • Connecting you with healthcare volunteers • General health information • Emergency guidance. For emergencies, please call 112. How can I help you today?'
-      }
+      // Use real OpenAI API
+      const contextualPrompt = `${this.systemPrompt}
 
-      const lowerMessage = message.toLowerCase()
-      let response = simpleResponses.default
-      
-      // Check for specific keywords in order of priority
-      if (lowerMessage.includes('emergency') || lowerMessage.includes('urgent')) {
-        response = simpleResponses.emergency
-      } else if (lowerMessage.includes('volunteer')) {
-        response = simpleResponses.volunteer
-      } else if (lowerMessage.includes('symptom') || lowerMessage.includes('pain') || lowerMessage.includes('fever') || lowerMessage.includes('headache')) {
-        response = simpleResponses.symptom
-      } else if (lowerMessage.includes('appointment') || lowerMessage.includes('book') || lowerMessage.includes('schedule')) {
-        response = simpleResponses.appointment
-      } else if (lowerMessage.includes('medicine') || lowerMessage.includes('drug') || lowerMessage.includes('medication')) {
-        response = simpleResponses.medicine
-      } else if (lowerMessage.includes('support') || lowerMessage.includes('help')) {
-        response = simpleResponses.support
-      }
+User Message: "${message}"
+
+Provide a helpful, empathetic response following the guidelines. Include:
+1. Empathy and acknowledgment
+2. Helpful general information
+3. Clear next steps
+4. Appropriate disclaimers
+5. Offer to connect with CareConnect services
+
+Keep the response concise but comprehensive (under 300 words).`
+
+      const response = await this.openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+          { role: "system", content: contextualPrompt },
+          { role: "user", content: message }
+        ],
+        max_tokens: 400,
+        temperature: 0.7
+      })
+
+      const aiResponse = response.choices[0].message.content.trim()
 
       return {
-        response,
+        response: aiResponse,
         analysis: {
           intent: 'general-inquiry',
           urgency: 'medium',
@@ -124,7 +120,7 @@ Provide analysis in JSON format:
   "escalate": true/false
 }`
 
-      const response = await openai.chat.completions.create({
+      const response = await this.openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: [
           { role: "system", content: "You are a medical message analyzer. Respond only with valid JSON." },
@@ -169,7 +165,7 @@ Provide a helpful, empathetic response following the guidelines. Include:
 
 Keep the response concise but comprehensive (under 300 words).`
 
-      const response = await openai.chat.completions.create({
+      const response = await this.openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: [
           { role: "system", content: contextualPrompt },
@@ -220,7 +216,7 @@ Provide a structured summary in JSON format:
   "nextSteps": ["step1", "step2"]
 }`
 
-      const response = await openai.chat.completions.create({
+      const response = await this.openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: [
           { role: "system", content: "You are a medical professional creating patient summaries. Respond only with valid JSON." },
@@ -259,7 +255,7 @@ Provide a structured summary in JSON format:
     ]
 
     try {
-      const response = await openai.chat.completions.create({
+      const response = await this.openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: [
           { 
