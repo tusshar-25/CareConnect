@@ -215,6 +215,12 @@ npm test
 
 ## 📦 Deployment
 
+### 🌐 Live Application
+
+**Frontend:** https://careconnect-8yxvgturr-tusshar-25s-projects.vercel.app/
+
+**Backend API:** https://careconnect-server-ezdg.onrender.com/api/health
+
 ### Frontend (Vercel)
 ```bash
 cd client
