@@ -11,3 +11,5 @@ services:
         value: production
       - key: PORT
         value: 3001
+    repo: https://github.com/tusshar-25/CareConnect.git
+    branch: main
