@@ -1,15 +1,12 @@
 services:
   - type: web
     name: careconnect-server
-    env: node
+    env: docker
     plan: free
-    buildCommand: echo "Build started"
-    startCommand: npm start
+    dockerfilePath: ./Dockerfile
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 3001
-    repo: https://github.com/tusshar-25/CareConnect.git
-    branch: main
