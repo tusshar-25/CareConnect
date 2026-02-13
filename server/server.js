@@ -105,6 +105,23 @@ app.use('/api/volunteers', volunteerRoutes)
 app.use('/api/contact', contactRoutes)
 app.use('/api/chatbot', chatbotRoutes)
 
+// API index route for debugging
+app.get('/api', (req, res) => {
+  res.json({
+    success: true,
+    message: 'CareConnect API is running',
+    endpoints: {
+      'GET /api/health': 'Health check endpoint',
+      'POST /api/patients': 'Patient support requests',
+      'POST /api/volunteers': 'Volunteer registration',
+      'POST /api/contact': 'Contact form submissions',
+      'POST /api/chatbot': 'AI chatbot messages',
+      'GET /api/chatbot/test': 'OpenAI integration test'
+    },
+    timestamp: new Date().toISOString()
+  })
+})
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ 
